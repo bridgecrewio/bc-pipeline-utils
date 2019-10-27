@@ -1,4 +1,3 @@
-import GitUtils
 
 def util
 
