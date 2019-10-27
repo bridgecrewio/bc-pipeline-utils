@@ -20,8 +20,8 @@ class GitUtils {
         }
     }
 
-    def checkout(url, branch) {
-        this.script.checkout([$class: 'GitSCM', branches: [[name: "*/${branch}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'github', url: "${url}"]]])
+    def mycheckout(String url, String branch) {
+        checkout([$class: 'GitSCM', branches: [[name: "*/${branch}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'github', url: "${url}"]]])
     }
 
     def hello() {
