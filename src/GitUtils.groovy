@@ -25,6 +25,6 @@ class GitUtils {
     }
 
     def hello() {
-        sh ("echo hello")
+        this.script.sh ("echo hello")
     }
 }
