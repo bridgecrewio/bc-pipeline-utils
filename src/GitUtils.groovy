@@ -6,10 +6,10 @@ class GitUtils {
     }
 
     def gitConfig() {
-        this.script.sh("git config user.email 'ci-build@bridgecrew.io'")
-        this.script.sh("git config user.name 'ci-build'")
-        this.script.sh("mkdir ~/.ssh")
-        this.script.sh("ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts")
+        sh("git config user.email 'ci-build@bridgecrew.io'")
+        sh("git config user.name 'ci-build'")
+        sh("mkdir ~/.ssh")
+        sh("ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts")
     }
 
     def gitCommandWithCredentials(command, credentials) {
