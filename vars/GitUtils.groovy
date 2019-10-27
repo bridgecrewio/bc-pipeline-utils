@@ -5,6 +5,10 @@ class GitUtils {
         this.script = script;
     }
 
+    def hello(){
+        this.script.sh("echo hello from git util");
+    }
+
     def gitConfig() {
         this.script.sh("git config user.email 'ci-build@bridgecrew.io'")
         this.script.sh("git config user.name 'ci-build'")
