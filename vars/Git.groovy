@@ -1,6 +1,11 @@
 import GitUtils
 
+def util
+
 def call() {
-    def util = new GitUtil("123")
-    utils.hello()
+    if (util) return util
+    else {
+        util = new GitUtils()
+    }
+    return util
 }

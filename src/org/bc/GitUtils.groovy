@@ -28,5 +28,3 @@ class GitUtils {
         println("hello")
     }
 }
-
-return this;
