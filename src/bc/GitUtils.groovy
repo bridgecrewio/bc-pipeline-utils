@@ -5,8 +5,6 @@ class GitUtils {
         this.script = script;
     }
 
-
-
     def gitConfig() {
         this.script.sh("git config user.email 'ci-build@bridgecrew.io'")
         this.script.sh("git config user.name 'ci-build'")
@@ -26,11 +24,9 @@ class GitUtils {
         this.script.checkout([$class: 'GitSCM', branches: [[name: "*/${branch}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'github', url: "${url}"]]])
     }
 
-}
-def hello(){
-    echo "hello Or Evron"
+    def hello() {
+        println("hello")
+    }
 }
 
-def newInstance(def script) {
-    return new GitUtils(script);
-}
+return this;
