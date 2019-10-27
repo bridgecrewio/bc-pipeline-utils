@@ -25,6 +25,6 @@ class GitUtils {
     }
 
     def hello() {
-        println("hello")
+        sh ("echo hello")
     }
 }
