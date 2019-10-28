@@ -1,7 +1,6 @@
 def call(awsAccount) {
     println "Running aws-nuke for profile: ${awsAccount}"
-    def accountMapping = readJSON file: "account_mapping_profile.json"
-    def accountId = accountMapping[awsAccount]
+    def accountId = accountFromProfile(awsAccount)
     sh """
             wget https://github.com/rebuy-de/aws-nuke/releases/download/v2.10.0/aws-nuke-v2.10.0-linux-amd64.tar.gz -O ./aws-nuke.tar.gz
             tar -xzf aws-nuke.tar.gz
