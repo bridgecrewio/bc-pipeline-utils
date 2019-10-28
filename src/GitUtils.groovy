@@ -12,7 +12,7 @@ class GitUtils {
         this.script.sh("ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts")
     }
 
-    def gitCommandWithCredentials(command, credentials) {
+    def gitCommandWithCredentials(String command, String credentials) {
         this.script.withCredentials([this.script.sshUserPrivateKey(credentialsId: credentials, keyFileVariable: 'ssh_key', passphraseVariable: '', usernameVariable: 'bridgecrew')]) {
             this.script.sh("cp ${this.script.ssh_key} ~/.ssh/id_rsa_write")
             this.script.sh("chmod 400 ~/.ssh/id_rsa_write")
