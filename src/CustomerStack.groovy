@@ -405,9 +405,3 @@ class CustomerStack {
         }
     }
 }
-
-def newInstance(def script, String bucket, String statePath, String customerName, def baseStack, def AccountMapping) {
-    return new CustomerStack(script, bucket, statePath, customerName, baseStack, AccountMapping);
-}
-
-return this;
