@@ -11,10 +11,8 @@ class BaseStack {
     def paramsFileName = "params.tfvars";
     def customerBaseImageName;
     def customerBaseImageURL;
-    def AccountMapping;
 
-    BaseStack(def script, String region, String aws_profile, String bucket, String statePath, String uniqueTag, def AccountMapping, String branch) {
-        this.AccountMapping = AccountMapping
+    BaseStack(def script, String region, String aws_profile, String bucket, String statePath, String uniqueTag, String branch) {
         this.branch = branch
         this.region = region
         this.aws_profile = aws_profile
@@ -24,10 +22,7 @@ class BaseStack {
         this.uniqueTag = uniqueTag
         this.script = script
         this.customerBaseImageName = "customer-stack-base-${this.aws_profile}"
-
-        def accountMapping = this.AccountMapping.getAccountMapping();
-
-        this.accountID = accountMapping[this.aws_profile];
+        this.accountID = this.script.accountFromProfile(this.aws_profile)
 
         if (uniqueTag) {
             this.customerBaseImageName += "-" + this.uniqueTag;

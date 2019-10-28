@@ -13,11 +13,9 @@ class CustomerStack {
     def customerImageName;
     def customerImageURL;
     def customerDetails = [:]
-    def AccountMapping;
     def baseAccountID;
 
-    CustomerStack(def script, String bucket, String statePath, String customerName, def baseStack, def AccountMapping) {
-        this.AccountMapping = AccountMapping
+    CustomerStack(def script, String bucket, String statePath, String customerName, def baseStack) {
         this.region = baseStack.region
         this.aws_profile = baseStack.aws_profile
         this.baseAccountID = baseStack.accountID
@@ -34,10 +32,7 @@ class CustomerStack {
 
     def signup(String aws_profile_customer, String email, String firstName, String lastName, String phone, def reuseCT = true) {
         def output = this.baseStack.readOutput();
-        def accountMapping = this.AccountMapping.getAccountMapping();
-        this.accountID = accountMapping[this.aws_profile];
-        def customerAccountID = accountMapping[aws_profile_customer];
-
+        def customerAccountID = this.script.accountFromProfile(this.aws_profile)
         this.customerDetails["accountId"] = customerAccountID;
         this.customerDetails["customer_name"] = this.customerName;
         this.customerDetails["email"] = email;
