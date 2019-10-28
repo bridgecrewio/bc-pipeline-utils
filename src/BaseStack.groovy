@@ -5,6 +5,7 @@ class BaseStack {
     def bucket;
     def statePath;
     def script;
+    def branch;
     def uniqueTag;
     def stateDir;
     def paramsFileName = "params.tfvars";
@@ -12,8 +13,9 @@ class BaseStack {
     def customerBaseImageURL;
     def AccountMapping;
 
-    BaseStack(def script, String region, String aws_profile, String bucket, String statePath, String uniqueTag, def AccountMapping) {
+    BaseStack(def script, String region, String aws_profile, String bucket, String statePath, String uniqueTag, def AccountMapping, String branch) {
         this.AccountMapping = AccountMapping
+        this.branch = branch
         this.region = region
         this.aws_profile = aws_profile
         this.accountID = aws_profile
@@ -118,7 +120,7 @@ class BaseStack {
                 ./migrate.sh ${this.bucket} ${this.stateDir}/${
                 this.paramsFileName
             } "--target module.create_us_east-1.module.create_cloudformation_stack" ${this.aws_profile}
-                git checkout ${this.script.env.GITHUB_BRANCH_NAME}
+                git checkout ${this.branch}
             """, returnStdout: true)
             migrationObj.RegionalCFs = 1
         }
@@ -166,7 +168,7 @@ class BaseStack {
         this.script.sh """
              json=\$(jq -n '{
                                  "branch_sha": "${this.script.env.GIT_COMMIT}",
-                                 "branch_name": "${this.script.env.GITHUB_BRANCH_NAME}",
+                                 "branch_name": "${this.branch}",
                              }')
 
              echo \$json | jq > info.json

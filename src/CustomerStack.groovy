@@ -125,7 +125,7 @@ class CustomerStack {
             if (reuseCT) {
                 def cloudtrailStackName = "bc-cloudtrail-bridgecrew";
 
-                this.script.sh "aws cloudformation deploy --region ${this.region} --profile ${aws_profile_customer} --stack-name ${cloudtrailStackName} --template-file ./jenkins/src/cf_cloudtrail_demo.json --no-fail-on-empty-changeset"
+                this.script.sh "aws cloudformation deploy --region ${this.region} --profile ${aws_profile_customer} --stack-name ${cloudtrailStackName} --template-file resources/cf_cloudtrail_demo.json --no-fail-on-empty-changeset"
 
                 def outputsCloudtrail = this.waitForCloudFormation(aws_profile_customer, cloudtrailStackName);
                 def outputFormat = [:]
