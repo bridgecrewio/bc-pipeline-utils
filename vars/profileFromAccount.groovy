@@ -1,4 +1,4 @@
 def call(awsAccount) {
-    def accountMapping = readJSON file: "account_mapping.json"
+    def accountMapping = readJSON file: "resources/account_mapping.json"
     return accountMapping[awsAccount]
 }
