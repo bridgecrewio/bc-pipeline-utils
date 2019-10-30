@@ -14,28 +14,28 @@ Holds groovy classes to be imported in the Jenkinsfile by the name of the file, 
 > @Library("Utils")_
 > import GitUtils
 >
-> def git = new GitUtils(this, env.GITHUB_WRITE)
-> ...
-> script {
-> git.withCredentials("push")
+> def git = new GitUtils(this, env.GITHUB_WRITE)  
+> ...  
+> script {  
+> git.withCredentials("push")  
 >}	
 >...
 
-the code above will import the file GitUtils from the src directory and create new instance of this class ready to use it's methods
+the code above will import the file GitUtils from the src directory and create new instance of this class ready to use it's methods  
 
 ### vars
-Holds one method groovy files that implements the method `call`.
+Holds one method groovy files that implements the method `call`.  
 This will create a method on the global scope of the pipeline ready to use with just using the `@Library` notation at the top of the Jenkinsfile, example:
->@Library("Utils)_
->...
+>@Library("Utils)_  
+>...  
 >def awsAccountId = accountFromProfile(env.AWS_BASE_PROFILE)
 
 The code above will use a file under the directory vars called accountFromProfile.groovy, that implements the `call` method the convert an AWS profile name (such as `stage`) to it's AWS account id number (such as `312345614275`)
 
 ### resources
-Holds any other resource files needed for the methods and classes in this repository to work proper, example:
-In the previous example we used the global function accountFromProfile that convert AWS account profile into it's co-related AWS account id number,
-In order to do so in the accountFromProfile.groovy file under the vars directory we load a json file that maps our AWS accounts and their profile names.
+Holds any other resource files needed for the methods and classes in this repository to work proper, example:  
+In the previous example we used the global function accountFromProfile that convert AWS account profile into it's co-related AWS account id number,  
+In order to do so in the accountFromProfile.groovy file under the vars directory we load a json file that maps our AWS accounts and their profile names.  
 the json file called `account_mapping_profile.json` is in the resources directory and should imported like this:
 > def call(awsAccount) {  
     def accountMapping = readJSON file: "resources/account_mapping_profile.json"  
