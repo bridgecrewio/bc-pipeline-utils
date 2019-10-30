@@ -1,6 +1,6 @@
 # bc-pipeline-utils
 
-This repository holds the global Jenkins utils library  that will be ready to import in any pipeline created to help you develop pipelines faster and avoid duplicate code blocks.
+This repository holds the global Jenkins utils library <br> that will be ready to import in any pipeline created to help you develop pipelines faster and avoid duplicate code blocks.
 
 The structure of this repository is following the required structure as described in the documentation of [Jenkins pipeline shared libraries](https://jenkins.io/doc/book/pipeline/shared-libraries/)
 
