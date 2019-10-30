@@ -55,8 +55,8 @@ class BaseStack {
 
                cat init.tfbackend
            """
-            def state_check = this.script.sh(
-                    script: """
+           def state_check = this.script.sh(
+                script: """
                    if aws s3api --profile ${aws_profile} head-object --bucket ${bucket} --key ${this.stateDir}/state.tfbackend 2>/dev/null;
                    then
                         echo "state exists"
@@ -64,13 +64,13 @@ class BaseStack {
                         echo "no state"
                    fi
                    """,
-                    returnStdout: true
-            )
-            if (state_check.contains("state exists")) {
-                this.migrate()
-            }
+                returnStdout: true
+           )
+           if (state_check.contains("state exists")) {
+               this.migrate()
+           }
 
-            this.script.sh(script: "terraform init -reconfigure -backend-config=init.tfbackend", returnStdout: true)
+           this.script.sh "terraform init -reconfigure -backend-config=init.tfbackend"
         }
     }
 
@@ -106,17 +106,15 @@ class BaseStack {
         def minor = versionParts[1].toInteger()
         def patch = versionParts[2].toInteger()
 
-        if ((!migrationObj.RegionalCFs || migrationObj.RegionalCFs < 1) && major >= 0 && minor >= 9 && patch >= 2) {
-            this.script.sh(script: """
+        if ((!migrationObj.RegionalCFs || migrationObj.RegionalCFs < 1) && major >= 0 && minor >= 9 && patch >= 3) {
+            this.script.sh """
                 cp ../../../devTools/migration/migrate.sh .
                 git checkout tags/v0.9.1
                 terraform init -reconfigure -backend-config=init.tfbackend
                 chmod +x migrate.sh
-                ./migrate.sh ${this.bucket} ${this.stateDir}/${
-                this.paramsFileName
-            } "--target module.create_us_east-1.module.create_cloudformation_stack" ${this.aws_profile}
+                ./migrate.sh ${this.bucket} ${this.stateDir}/${this.paramsFileName} "--target module.create_us_east-1.module.create_cloudformation_stack" ${this.aws_profile}
                 git checkout ${this.branch}
-            """, returnStdout: true)
+            """
             migrationObj.RegionalCFs = 1
         }
 
@@ -124,24 +122,21 @@ class BaseStack {
         this.script.sh "aws s3api put-object --profile ${this.aws_profile} --bucket ${this.bucket} --key ${this.stateDir}/migrations.json --body ./migrations.json"
     }
 
-    def paramsFile(String slackHookUrl, String zendeskApiKey, boolean turboMode, String googleAnalytics, String circleCIKey, String appNpmToken, String domain) {
+    def paramsFile(String slackHookUrl, String zendeskApiKey, boolean turboMode, String googleAnalytics, String circleCIKey, String appNpmToken, String domain = null) {
         this.script.sh """
                            echo 'region = "${this.region}"' > ${this.paramsFileName}
                            echo 'aws_profile = "${this.aws_profile}"' >> ${this.paramsFileName}
                            echo 'state_bucket = "${this.bucket}"' >> ${this.paramsFileName}
                            echo 'slack_hook_url = "${slackHookUrl}"' >> ${this.paramsFileName}
                            echo 'unique_tag = "${this.uniqueTag}"' >> ${this.paramsFileName}
+                           echo 'circle_job_branch = "${this.branchName}"' >> ${this.paramsFileName}
                            echo 'zendesk_api_key = "${zendeskApiKey}"' >> ${this.paramsFileName}
                            echo 'google_analytics_key = "${googleAnalytics}"' >> ${this.paramsFileName}
                            echo 'circle_ci_key = "${circleCIKey}"' >> ${this.paramsFileName}
                            echo 'app_npm_token = "${appNpmToken}"' >> ${this.paramsFileName}
                            echo 'run_circleci = "False"' >> ${this.paramsFileName}
-                           echo 'support_email = "t${this.uniqueTag ? "+" + this.uniqueTag : ""}@bridgecrew.io"' >> ${
-            this.paramsFileName
-        }
+                           echo 'support_email = "t${this.uniqueTag ? "+" + this.uniqueTag : ""}@bridgecrew.io"' >> ${this.paramsFileName}
                         """
-
-        this.script.sh "echo domain: $domain"
 
         if (turboMode == true) {
             this.script.sh "echo 'turbo_mode = true' >> ${this.paramsFileName}"
@@ -175,13 +170,13 @@ class BaseStack {
         this.script.sh "aws s3api get-object --profile ${this.aws_profile} --bucket ${this.bucket} --key ${this.stateDir}/${this.paramsFileName} ${this.paramsFileName}"
     }
 
-    def plan(String slackHookUrl, String zendeskApiKey, boolean turboMode, String googleAnalytics, String circleCIKey, String appNpmToken, String domain = null) {
+    def plan(String slackHookUrl, String zendeskApiKey, boolean turboMode, String googleAnalytics,String circleCIKey, String appNpmToken, String domain = null) {
         this.script.dir('src/stacks/baseStack') {
             paramsFile(slackHookUrl, zendeskApiKey, turboMode, googleAnalytics, circleCIKey, appNpmToken, domain)
-            this.script.sh(script: """
+            this.script.sh """
              export isLocal=false
              terraform plan --var-file=${this.paramsFileName}
-             """, returnStdout: true)
+             """
         }
     }
 
@@ -189,10 +184,10 @@ class BaseStack {
         this.script.dir('src/stacks/baseStack') {
             this.RestoreFromS3()
 
-            this.script.sh(script: """
+            this.script.sh """
             export isLocal=false
             terraform plan --var-file=${this.paramsFileName}
-            """, returnStdout: true)
+            """
         }
     }
 
@@ -201,10 +196,10 @@ class BaseStack {
             paramsFile(slackHookUrl, zendeskApiKey, turboMode, googleAnalytics, circleCIKey, appNpmToken, domain)
             this.BackupToS3()
 
-            this.script.sh(script: """
+            this.script.sh """
             export isLocal=false
             terraform apply --var-file=${this.paramsFileName} -auto-approve
-            """, returnStdout: true)
+            """
         }
     }
 
@@ -212,10 +207,10 @@ class BaseStack {
         this.script.dir('src/stacks/baseStack') {
             this.RestoreFromS3()
 
-            this.script.sh(script: """
+            this.script.sh """
                          export isLocal=false
                          terraform apply --var-file=${this.paramsFileName} -auto-approve
-                         """, returnStdout: true)
+                         """
         }
     }
 
@@ -223,10 +218,10 @@ class BaseStack {
         this.script.dir('src/stacks/baseStack') {
             this.RestoreFromS3()
 
-            this.script.sh(script: """
+            this.script.sh """
                          export isLocal=false
                          terraform destroy --var-file=${this.paramsFileName} -auto-approve
-                         """, returnStdout: true)
+                         """
 
             this.script.sh "aws s3 rm --profile ${this.aws_profile} s3://${this.bucket}/${this.stateDir} --recursive"
 
@@ -243,6 +238,7 @@ class BaseStack {
 
     def createCustomerBaseImage() {
         this.script.sh "rsync -av src jenkins/src/customerDockerFiles/base --exclude node_modules"
+
 
 
         this.script.dir('jenkins/src/customerDockerFiles/base') {
@@ -270,9 +266,7 @@ class BaseStack {
         )
 
         def reposJson = this.script.readJSON text: repos;
-        def customersRepos = reposJson.repositories.findAll {
-            it.repositoryName.startsWith(this.customerBaseImageName + "-")
-        }
+        def customersRepos = reposJson.repositories.findAll { it.repositoryName.startsWith(this.customerBaseImageName + "-") }
         return customersRepos.collect { it.repositoryName.substring(this.customerBaseImageName.length() + 1) }
     }
 }

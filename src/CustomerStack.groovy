@@ -25,7 +25,7 @@ class CustomerStack {
         this.customerName = customerName
         this.baseStack = baseStack
         this.stateDir = statePath + "/" + customerName
-        this.customerImageName = "${this.baseStack.customerBaseImageName}-${this.customerName}";
+        this.customerImageName  = "${this.baseStack.customerBaseImageName}-${this.customerName}";
         this.customerImageURL = baseStack.accountID + ".dkr.ecr." + this.region + ".amazonaws.com/" + this.customerImageName;
 
     }
@@ -116,7 +116,7 @@ class CustomerStack {
         this.script.echo(describeStackCode.toString())
 
         if (describeStackCode != 0) {
-            def cloudtrailParams = ""
+        def cloudtrailParams = ""
             if (reuseCT) {
                 def cloudtrailStackName = "bc-cloudtrail-bridgecrew";
 
@@ -137,11 +137,7 @@ class CustomerStack {
                     } --stack-name ${stackName}  \
                                     --template-url ${url} \
                                     --capabilities CAPABILITY_NAMED_IAM \
-                                    --parameters ParameterKey=ResourceNamePrefix,ParameterValue=${
-                        paramResourceNamePrefix
-                    } ParameterKey=ExternalID,ParameterValue=${
-                        paramExternalID
-                    } ParameterKey=CustomerName,ParameterValue=${paramCustomerName} ${cloudtrailParams} 
+                                    --parameters ParameterKey=ResourceNamePrefix,ParameterValue=${paramResourceNamePrefix} ParameterKey=ExternalID,ParameterValue=${paramExternalID} ParameterKey=CustomerName,ParameterValue=${paramCustomerName} ${cloudtrailParams} 
                 """,
                     returnStdout: true
             ).trim();
@@ -171,7 +167,7 @@ class CustomerStack {
         return this.customerDetails;
     }
 
-    def waitForCloudFormation(String aws_profile_customer, String stackID) {
+    def waitForCloudFormation(String aws_profile_customer,String stackID) {
         def stackStatus = "";
         def aws_res;
 
@@ -184,7 +180,7 @@ class CustomerStack {
             } else {
                 stackStatus = this.script.readJSON(text: aws_res).Stacks[0].StackStatus;
                 this.script.echo stackStatus;
-                if (stackStatus == "ROLLBACK_COMPLETE") {
+                if(stackStatus == "ROLLBACK_COMPLETE") {
                     throw new Exception("Deploy CloudFormation Failed " + stackID)
                 }
                 this.script.sleep(time: 10, unit: "SECONDS");
@@ -294,23 +290,15 @@ class CustomerStack {
                 --build-arg bucket=${this.baseStack.bucket} \
                 --build-arg key=${this.stateDir} \
                 --build-arg customer_name=${this.customerName} \
-                --build-arg client_sqs_arn=${
-                (customerDetails.customer_account_info != null && customerDetails.customer_account_info.SQSQueueARN != null) ? customerDetails.customer_account_info.SQSQueueARN : ""
-            } \
-                --build-arg customer_assume_role_arn=${
-                (customerDetails.customer_account_info != null && customerDetails.customer_account_info.STSRoleARN != null) ? customerDetails.customer_account_info.STSRoleARN : ""
-            } \
+                --build-arg client_sqs_arn=${(customerDetails.customer_account_info != null && customerDetails.customer_account_info.SQSQueueARN != null) ? customerDetails.customer_account_info.SQSQueueARN : ""} \
+                --build-arg customer_assume_role_arn=${(customerDetails.customer_account_info != null && customerDetails.customer_account_info.STSRoleARN != null) ? customerDetails.customer_account_info.STSRoleARN : ""} \
                 --build-arg user_pool_id=${baseStackOutput.user_pool.value} \
                 --build-arg owner_first_name=${(customerDetails.firstName != null) ? customerDetails.firstName : ""} \
                 --build-arg owner_family_name=${(customerDetails.lastName != null) ? customerDetails.lastName : ""} \
                 --build-arg owner_phone=${(customerDetails.phone != null) ? customerDetails.phone : ""} \
                 --build-arg owner_email=${(customerDetails.email != null) ? customerDetails.email : ""} \
-                --build-arg customer_aws_account_id=${
-                (customerDetails.accountId != null) ? customerDetails.accountId : ""
-            } \
-                --build-arg customer_assume_cross_account_role_arn=${
-                (customerDetails.customer_account_info != null && customerDetails.customer_account_info.RoleARN != null) ? customerDetails.customer_account_info.RoleARN : ""
-            } \
+                --build-arg customer_aws_account_id=${(customerDetails.accountId != null) ? customerDetails.accountId : ""} \
+                --build-arg customer_assume_cross_account_role_arn=${(customerDetails.customer_account_info != null && customerDetails.customer_account_info.RoleARN != null) ? customerDetails.customer_account_info.RoleARN : ""} \
                 --build-arg base_stack_unique_tag=${this.baseStack.uniqueTag} \
                 .
             """
@@ -356,7 +344,7 @@ class CustomerStack {
         }
     }
 
-    def configureLacework(def laceworkSecret, def laceworkKey, def customerAccountID) {
+    def configureLacework(def laceworkSecret,def laceworkKey, def customerAccountID) {
         def laceworkIntegration = """
             {
                 "customer_name": "${this.customerName}",
@@ -375,12 +363,8 @@ class CustomerStack {
         def laceworkIntegrationJson = this.script.readJSON text: laceworkIntegration.trim()
 
         this.script.sh """
-            aws lambda invoke --profile ${this.aws_profile} --region ${
-            this.region
-        } --function-name integrations-handler${this.baseStack.uniqueTag} \\
-                --payload '{"path":"/api/v1/integrations","httpMethod":"POST","body":"${
-            laceworkIntegrationJson.toString().replace("\"", "\\\"")
-        }","headers":{"content-type":"application/json"},"requestContext":{}}' outfile
+            aws lambda invoke --profile ${this.aws_profile} --region ${this.region} --function-name integrations-handler${this.baseStack.uniqueTag} \\
+                --payload '{"path":"/api/v1/integrations","httpMethod":"POST","body":"${laceworkIntegrationJson.toString().replace("\"","\\\"")}","headers":{"content-type":"application/json"},"requestContext":{}}' outfile
         """
     }
 
