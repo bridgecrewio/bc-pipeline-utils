@@ -18,7 +18,7 @@ class GitUtils {
         this.script.sh("ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts")
     }
 
-    def withCreds(String command) {
+    def withCredentials(String command) {
         this.script.withCredentials([this.script.sshUserPrivateKey(credentialsId: this.credentials, keyFileVariable: 'ssh_key', passphraseVariable: '', usernameVariable: 'bridgecrew')]) {
             this.script.sh("pwd")
             this.script.sh("ls -la")
