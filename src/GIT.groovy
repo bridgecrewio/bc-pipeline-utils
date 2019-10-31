@@ -21,6 +21,7 @@ class GitUtils {
     def withCredentials(String command) {
         this.script.withCredentials([this.script.sshUserPrivateKey(credentialsId: this.credentials, keyFileVariable: 'ssh_key', passphraseVariable: '', usernameVariable: 'bridgecrew')]) {
             this.script.sh("pwd")
+            this.script.sh("ls -la")
             this.script.sh("cp ${this.script.ssh_key} ~/.ssh/id_rsa_write")
             this.script.sh("chmod 400 ~/.ssh/id_rsa_write")
             this.script.sh("GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa_write' git ${command}")
