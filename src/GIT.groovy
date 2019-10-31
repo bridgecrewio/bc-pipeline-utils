@@ -1,12 +1,12 @@
 class GitUtils {
     def script;
-    String credentials
+    def credentials
 
     GitUtils(def script) {
         this.script = script;
     }
 
-    GitUtils(def script, String credentials) {
+    GitUtils(def script, def credentials) {
         this.script = script
         this.credentials = credentials
     }
@@ -18,7 +18,7 @@ class GitUtils {
         this.script.sh("ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts")
     }
 
-    def withCredentials(String command) {
+    def withCreds(String command) {
         this.script.withCredentials([this.script.sshUserPrivateKey(credentialsId: this.credentials, keyFileVariable: 'ssh_key', passphraseVariable: '', usernameVariable: 'bridgecrew')]) {
             this.script.sh("pwd")
             this.script.sh("ls -la")
