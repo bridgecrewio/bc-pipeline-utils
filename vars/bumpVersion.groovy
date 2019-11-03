@@ -7,4 +7,5 @@ def call(){
     packageJson['version'] = version.join('.')
     println "next version ${packageJson['version']}"
     writeJSON file: "package.json", json: packageJson, pretty: 4
+    return packageJson['version']
 }
