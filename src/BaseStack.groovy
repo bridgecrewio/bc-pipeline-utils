@@ -1,5 +1,3 @@
-@Library('Utils') _
-
 class BaseStack {
     def region;
     def aws_profile;
@@ -24,7 +22,7 @@ class BaseStack {
         this.uniqueTag = uniqueTag
         this.script = script
         this.customerBaseImageName = "customer-stack-base-${this.aws_profile}"
-        this.accountID = this.script.accountFromProfile(this.aws_profile)
+        this.accountID = accountFromProfile(this.aws_profile)
 
         if (uniqueTag) {
             this.customerBaseImageName += "-" + this.uniqueTag;
