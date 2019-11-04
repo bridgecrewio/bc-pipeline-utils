@@ -1,3 +1,5 @@
+@Library('Utils') _
+
 class BaseStack {
     def region;
     def aws_profile;
