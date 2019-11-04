@@ -1,5 +1,4 @@
-  
-@Library('Utils').vars _
+@Library('Utils') import accountFromProfile
 
 class BaseStack {
     def region;
