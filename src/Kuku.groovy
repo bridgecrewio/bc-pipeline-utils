@@ -7,12 +7,12 @@ static def doSomething(awsAccount) {
     return object[awsAccount]
 }
 
-class Kuku {
+class Kuki {
     def something
     def script
     def some
 
-    Kuku(def script) {
+    Kuki(def script) {
         this.script = script
         this.something = doSomething("dev")
         this.some = accountFromProfile("dev")
