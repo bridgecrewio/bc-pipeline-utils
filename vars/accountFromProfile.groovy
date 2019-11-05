@@ -1,5 +1,6 @@
 def call(awsAccount) {
     def accountMapping = libraryResource "account_mapping_profile.json"
-    return accountMapping.get(awsAccount)
-//    return accountMapping[awsAccount]
+    def jsonSlurper = new JsonSlurper()
+    def object = jsonSlurper.parseText(accountMapping)
+    return object[awsAccount]
 }
