@@ -1,6 +1,6 @@
 import groovy.json.JsonSlurper;
 
-static def doSomething(awsAccount) {
+def doSomething(awsAccount) {
     def accountMapping = libraryResource "account_mapping_profile.json"
     def jsonSlurper = new JsonSlurper()
     def object = jsonSlurper.parseText(accountMapping)
@@ -8,18 +8,18 @@ static def doSomething(awsAccount) {
 }
 
 class Kuki {
-    def something
     def script
     def some
+    def something
 
     Kuki(def script) {
         this.script = script
-        this.something = doSomething("dev")
         this.some = accountFromProfile("dev")
+        this.something = doSomething("dev")
     }
 
     def print() {
-        this.script.println(this.something)
-        this.script.println(this.some)
+        println(this.something)
+        println(this.some)
     }
 }
