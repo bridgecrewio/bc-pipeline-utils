@@ -7,14 +7,19 @@ static def doSomething(awsAccount) {
     return object[awsAccount]
 }
 
-class Test {
+class Kuku {
     def something
+    def script
+    def some
 
-    Test() {
-        this.something = doSomething("dev");
+    Kuku(def script) {
+        this.script = script
+        this.something = doSomething("dev")
+        this.some = accountFromProfile("dev")
     }
 
     def print() {
-        println(this.something)
+        this.script.println(this.something)
+        this.script.println(this.some)
     }
 }
