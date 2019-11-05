@@ -15,7 +15,7 @@ class Kuku {
         this.something = accountFromProfile["dev"]
     }
 
-    def print() {
+    def p() {
         println(this.something)
         println(this.accountFromProfile)
     }
