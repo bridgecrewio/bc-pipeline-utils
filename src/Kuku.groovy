@@ -16,7 +16,10 @@ class Kuku {
         println(this.something)
     }
 
-    some(){return this.something}
+    def some(){
+        println "return something"
+        return this.something
+    }
 
     def p() {
         println(this.something)
