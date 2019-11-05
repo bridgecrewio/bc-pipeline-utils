@@ -14,8 +14,8 @@ class Kuki {
     def doSomething(awsAccount) {
         println new File(".").absolutePath
         def jsonSlurper = new JsonSlurper()
-        def accountMapping = jsonSlurper.parse(new File("./account_mapping_profile.json").text)
-        return accountMapping[awsAccount]
+//        def accountMapping = jsonSlurper.parse(new File("./account_mapping_profile.json").text)
+//        return accountMapping[awsAccount]
     }
 
     def print() {
