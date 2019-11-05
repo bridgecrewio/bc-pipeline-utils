@@ -16,6 +16,8 @@ class Kuku {
         println(this.something)
     }
 
+    some(){return this.something}
+
     def p() {
         println(this.something)
         println(this.accountFromProfile)
