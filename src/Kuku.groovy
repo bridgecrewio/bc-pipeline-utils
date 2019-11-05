@@ -1,4 +1,4 @@
-class Kuki {
+class Kuku {
     def something
     def accountFromProfile = [
             "dev"  : "090772183824",
@@ -11,7 +11,7 @@ class Kuki {
             "demo" : "418408045322"
     ]
 
-    Kuki() {
+    Kuku() {
         this.something = accountFromProfile["dev"]
     }
 
