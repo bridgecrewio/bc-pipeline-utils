@@ -13,6 +13,7 @@ class Kuku {
 
     Kuku() {
         this.something = accountFromProfile["dev"]
+        println(this.something)
     }
 
     def p() {
