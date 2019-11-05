@@ -17,5 +17,6 @@ class Kuku {
 
     def print() {
         println(this.something)
+        println(this.accountFromProfile)
     }
 }
