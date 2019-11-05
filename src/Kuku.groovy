@@ -7,16 +7,14 @@ class Kuki {
 
     Kuki(def script) {
         this.script = script
-//        this.some = accountFromProfile("dev")
         this.something = doSomething("dev")
     }
 
     @NonCPS
     def doSomething(awsAccount) {
-        def accountMapping = this.script.readJSON "account_mapping_profile.json"
         def jsonSlurper = new JsonSlurper()
-        def object = jsonSlurper.parseText(accountMapping)
-        return object[awsAccount]
+        def accountMapping = jsonSlurper.parse(new File("account_mapping_profile.json").text)
+        return accountMapping[awsAccount]
     }
 
     def print() {
