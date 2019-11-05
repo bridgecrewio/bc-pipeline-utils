@@ -14,7 +14,7 @@ class Kuki {
 
     Kuki(def script) {
         this.script = script
-        this.some = accountFromProfile("dev")
+//        this.some = accountFromProfile("dev")
         this.something = doSomething("dev")
     }
 
