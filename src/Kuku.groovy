@@ -1,25 +1,21 @@
-import groovy.json.JsonSlurper;
-
 class Kuki {
-    def script
-    def some
     def something
+    def accountFromProfile = [
+            "dev"  : "090772183824",
+            "test" : "148726905943",
+            "stage": "372188014275",
+            "acme3": "714018233037",
+            "acme" : "809694787632",
+            "prod" : "890234264427",
+            "root" : "986292867370",
+            "demo" : "418408045322"
+    ]
 
-    Kuki(def script) {
-        this.script = script
-        this.something = doSomething("dev")
-    }
-
-    @NonCPS
-    def doSomething(awsAccount) {
-        println new File(".").absolutePath
-        def jsonSlurper = new JsonSlurper()
-//        def accountMapping = jsonSlurper.parse(new File("./account_mapping_profile.json").text)
-//        return accountMapping[awsAccount]
+    Kuki() {
+        this.something = accountFromProfile["dev"]
     }
 
     def print() {
         println(this.something)
-        println(this.some)
     }
 }
