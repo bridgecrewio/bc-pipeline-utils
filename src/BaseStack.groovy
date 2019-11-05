@@ -26,13 +26,11 @@ class BaseStack {
         this.branch = branch
         this.region = region
         this.aws_profile = aws_profile
-        this.accountID = aws_profile
         this.bucket = bucket
         this.statePath = statePath
         this.uniqueTag = uniqueTag
         this.script = script
         this.customerBaseImageName = "customer-stack-base-${this.aws_profile}"
-        this.accountID = this.accountFromProfile[this.aws_profile]
 
         if (uniqueTag) {
             this.customerBaseImageName += "-" + this.uniqueTag;
@@ -40,11 +38,11 @@ class BaseStack {
         } else {
             this.stateDir = statePath
         }
-
-        this.customerBaseImageURL = this.accountID + ".dkr.ecr." + this.region + ".amazonaws.com/" + this.customerBaseImageName;
     }
 
     def init(){
+        this.accountID = this.script.accountFromProfile(this.aws_profile)
+        this.customerBaseImageURL = this.accountID + ".dkr.ecr." + this.region + ".amazonaws.com/" + this.customerBaseImageName;
         this.script.dir('src/stacks/baseStack') {
             this.script.sh """
                  if aws s3api head-bucket --profile ${aws_profile} --region ${region} --bucket ${bucket} 2>/dev/null;
