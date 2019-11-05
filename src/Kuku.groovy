@@ -22,7 +22,7 @@ class Kuku {
     }
 
     def p() {
-        println(this.something)
+        println("" + this.something)
         println(this.accountFromProfile)
     }
 }
