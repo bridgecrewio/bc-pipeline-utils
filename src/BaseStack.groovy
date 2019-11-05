@@ -141,7 +141,7 @@ class BaseStack {
                            echo 'state_bucket = "${this.bucket}"' >> ${this.paramsFileName}
                            echo 'slack_hook_url = "${slackHookUrl}"' >> ${this.paramsFileName}
                            echo 'unique_tag = "${this.uniqueTag}"' >> ${this.paramsFileName}
-                           echo 'circle_job_branch = "${this.branchName}"' >> ${this.paramsFileName}
+                           echo 'circle_job_branch = "${this.branch}"' >> ${this.paramsFileName}
                            echo 'zendesk_api_key = "${zendeskApiKey}"' >> ${this.paramsFileName}
                            echo 'google_analytics_key = "${googleAnalytics}"' >> ${this.paramsFileName}
                            echo 'circle_ci_key = "${circleCIKey}"' >> ${this.paramsFileName}
