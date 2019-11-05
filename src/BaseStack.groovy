@@ -12,7 +12,6 @@ class BaseStack {
     def customerBaseImageName;
     def customerBaseImageURL;
 
-    @NonCPS
     BaseStack(def script, String region, String aws_profile, String bucket, String statePath, String uniqueTag, String branch) {
         this.branch = branch
         this.region = region
