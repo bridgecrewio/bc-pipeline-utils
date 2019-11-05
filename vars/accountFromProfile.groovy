@@ -1,5 +1,5 @@
 def call(awsAccount) {
     def accountMapping = libraryResource "account_mapping_profile.json"
-    println accountMapping
-    return accountMapping[awsAccount]
+    return accountMapping.get(awsAccount)
+//    return accountMapping[awsAccount]
 }
