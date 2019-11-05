@@ -42,7 +42,9 @@ class BaseStack {
         }
 
         this.customerBaseImageURL = this.accountID + ".dkr.ecr." + this.region + ".amazonaws.com/" + this.customerBaseImageName;
+    }
 
+    def init(){
         this.script.dir('src/stacks/baseStack') {
             this.script.sh """
                  if aws s3api head-bucket --profile ${aws_profile} --region ${region} --bucket ${bucket} 2>/dev/null;
@@ -65,8 +67,8 @@ class BaseStack {
 
                cat init.tfbackend
            """
-           def state_check = this.script.sh(
-                script: """
+            def state_check = this.script.sh(
+                    script: """
                    if aws s3api --profile ${aws_profile} head-object --bucket ${bucket} --key ${this.stateDir}/state.tfbackend 2>/dev/null;
                    then
                         echo "state exists"
@@ -74,13 +76,13 @@ class BaseStack {
                         echo "no state"
                    fi
                    """,
-                returnStdout: true
-           )
-           if (state_check.contains("state exists")) {
-               this.migrate()
-           }
+                    returnStdout: true
+            )
+            if (state_check.contains("state exists")) {
+                this.migrate()
+            }
 
-           this.script.sh "terraform init -reconfigure -backend-config=init.tfbackend"
+            this.script.sh "terraform init -reconfigure -backend-config=init.tfbackend"
         }
     }
 
