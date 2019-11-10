@@ -1,9 +1,16 @@
-def call(){
+def call(stage) {
     println "bumping version"
     def packageJson = readJSON file: "package.json"
     println "current version ${packageJson['version']}"
+    println "going to bump ${stage}"
+    def index = 2
+    switch (stage) {
+        case "major": index = 0; break;
+        case "minor": index = 1; break;
+        case "patch": index = 2; break;
+    }
     def version = packageJson['version'].split('\\.')
-    version[2] = version[2].toInteger() + 1
+    version[index] = version[index].toInteger() + 1
     packageJson['version'] = version.join('.')
     println "next version ${packageJson['version']}"
     writeJSON file: "package.json", json: packageJson, pretty: 4
