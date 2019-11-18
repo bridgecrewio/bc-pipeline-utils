@@ -11,6 +11,7 @@ def call(stage) {
     }
     def version = packageJson['version'].split('\\.')
     version[index] = version[index].toInteger() + 1
+    for (def i = 2; i > index; i--) version[i] = 0
     packageJson['version'] = version.join('.')
     println "next version ${packageJson['version']}"
     writeJSON file: "package.json", json: packageJson, pretty: 4
