@@ -41,7 +41,7 @@ class GitUtils {
         script.withCredentials([script.sshUserPrivateKey(credentialsId: credentialsId, keyFileVariable: 'ssh_key')]) {
             def keyPath = String.format('~/.ssh/id_rsa_%s', credentialsId)
             script.sh("""
-                cp ${ssh_key} ${keyPath}
+                cp ${script.ssh_key} ${keyPath}
                 chmod 400 ${keyPath}
                 echo IdentityFile ${keyPath} >> ~/.ssh/config
             """)
