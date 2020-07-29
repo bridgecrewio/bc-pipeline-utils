@@ -12,10 +12,9 @@ class GitUtils {
     }
 
     def gitConfig() {
+        GitUtils.configureGithubHost(this.script)
         this.script.sh("git config user.email 'ci-build@bridgecrew.io'")
         this.script.sh("git config user.name 'ci-build'")
-        this.script.sh("mkdir ~/.ssh")
-        this.script.sh("ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts")
     }
 
     def withCredentials(String command) {
@@ -28,5 +27,24 @@ class GitUtils {
 
     def checkout(String url, String branch, String credentialsId = 'github') {
         this.script.checkout([$class: 'GitSCM', branches: [[name: "*/${branch}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: "${credentialsId}", url: "${url}"]]])
+    }
+
+    static def configureGithubHost(def script) {
+        script.sh("""
+            mkdir ~/.ssh
+            ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+            """)
+    }
+
+    static def addPrivateKey(def script, String credentialsId) {
+        GitUtils.configureGithubHost(script)
+        script.withCredentials([script.sshUserPrivateKey(credentialsId: credentialsId, keyFileVariable: 'ssh_key')]) {
+            def keyPath = String.format('~/.ssh/id_rsa_%s', credentialsId)
+            script.sh("""
+                cp ${ssh_key} ${keyPath}
+                chmod 400 ${keyPath}
+                echo IdentityFile ${keyPath} >> ~/.ssh/config
+            """)
+        }
     }
 }
