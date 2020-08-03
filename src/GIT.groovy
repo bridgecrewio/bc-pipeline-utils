@@ -31,7 +31,7 @@ class GitUtils {
 
     static def configureGithubHost(def script) {
         script.sh("""
-            mkdir ~/.ssh
+            mkdir -p ~/.ssh
             ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
             """)
     }
