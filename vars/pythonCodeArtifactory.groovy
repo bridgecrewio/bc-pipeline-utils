@@ -1,4 +1,4 @@
-def call(stage) {
+def call() {
     println "logging into AWS CodeArtifact"
     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'code-artifact', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                     script {
