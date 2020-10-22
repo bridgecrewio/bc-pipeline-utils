@@ -9,7 +9,7 @@ def call() {
                         sh "aws codeartifact login --tool pip --repository relations-graph --domain bridgecrew --domain-owner 890234264427 --profile artifact --region us-west-2"
                         codeartifactAuthToken=sh(script:"aws codeartifact get-authorization-token --domain bridgecrew --domain-owner 890234264427 --query authorizationToken --output text --profile artifact --region us-west-2", returnStdout:true).trim()
                         env.CODEARTIFACT_AUTH_TOKEN = codeartifactAuthToken
-                        sh "pipenv install --pypi-mirror https://aws:\$CODEARTIFACT_AUTH_TOKEN@bridgecrew-890234264427.d.codeartifact.us-west-2.amazonaws.com/pypi/relations-graph/simple/"
+                        sh "pipenv install"
                     }
     }
 }
