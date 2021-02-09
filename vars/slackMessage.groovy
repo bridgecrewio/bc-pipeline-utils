@@ -20,14 +20,13 @@ def call(committerEmail) {
     msg += "\n"
     msg += "*Build:* <${env.BUILD_URL}|${currentBuild.displayName}> \n"
     msg += "*Status:* ${currentBuild.currentResult} \n"
-    msg += "*User:* @${committerEmail}\n"
     msg += "*Running By:* ${userId}\n"
     msg += "*Branch:* <${gitUrl}/tree/${env.GITHUB_BRANCH_NAME}|(${env.GITHUB_BRANCH_NAME})>\n"
     msg += "*Changes:* \n"
 
     if (!currentBuild.changeSets.isEmpty()) {
         currentBuild.changeSets.first().getLogs().each {
-            msg += "- <${gitUrl}/commit/${it.getCommitId()}|`${it.getCommitId().substring(0, 8)}`> *${it.getComment().substring(0, it.getComment().length() - 1)}*\n"
+            msg += "- <${gitUrl}/commit/${it.getCommitId()}|`${it.getCommitId().substring(0, 8)}`>[@${it.getAuthor().getDisplayName()}] *${it.getComment().substring(0, it.getComment().length() - 1)}*\n"
         }
     } else {
         msg += "no changes for this run\n"
