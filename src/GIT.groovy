@@ -33,6 +33,7 @@ class GitUtils {
         script.sh("""
             mkdir -p ~/.ssh
             ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+            ssh-keyscan -t rsa spring.paloaltonetworks.com >> ~/.ssh/known_hosts
             """)
     }
 
