@@ -16,8 +16,24 @@ class AWS {
             }
         }
     }
-
-
+    
+    def configureAWSProfile(String profile, String account, String region = null, Integer durationSeconds = this.standardSessionDuration) {
+      this.script.sh """
+            echo "getting creds for profile ${profile}"
+            set +x
+            ASSUME_ROLE_OUTPUT=\$(aws sts assume-role --role-arn arn:aws:iam::${account}:role/jenkins_agent_cross_account --duration-seconds ${durationSeconds} --role-session-name "jenkins-cross-account")
+            ACCESS_KEY_ID=\$(echo \$ASSUME_ROLE_OUTPUT | jq -r '.Credentials.AccessKeyId')
+            SECRET_ACCESS_KEY=\$(echo \$ASSUME_ROLE_OUTPUT | jq -r '.Credentials.SecretAccessKey')
+            SESSION_TOKEN=\$(echo \$ASSUME_ROLE_OUTPUT | jq -r '.Credentials.SessionToken')
+            aws configure --profile ${profile} set aws_access_key_id \$ACCESS_KEY_ID
+            aws configure --profile ${profile} set aws_secret_access_key \$SECRET_ACCESS_KEY
+            aws configure --profile ${profile} set aws_session_token \$SESSION_TOKEN
+            set -x
+            if [ -z "${region}" ]; then
+              aws configure --profile ${profile} set region ${region}
+            fi
+        """
+    }
 
     def nukeAccount(awsAccount) {
         println "Running aws-nuke for profile: ${awsAccount}"
