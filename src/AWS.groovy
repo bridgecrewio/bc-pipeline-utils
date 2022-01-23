@@ -17,7 +17,7 @@ class AWS {
         }
     }
     
-    def configureAWSProfile(String profile, String account, String region = null, Integer durationSeconds = this.standardSessionDuration) {
+    def configureAWSProfile(String profile, String account, String region = null, Integer durationSeconds) {
       this.script.sh """
             echo "getting creds for profile ${profile}"
             set +x
