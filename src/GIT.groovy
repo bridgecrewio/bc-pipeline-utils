@@ -25,8 +25,8 @@ class GitUtils {
         }
     }
 
-    def checkout(String url, String branch, String credentialsId = 'github', boolean shallowClone = true) {
-        this.script.checkout([$class: 'GitSCM', branches: [[name: "*/${branch}"]], doGenerateSubmoduleConfigurations: false, extensions:  [$class: 'CloneOption', depth: 1, noTags: false, reference: '', shallow: ${shallowClone}], submoduleCfg: [], userRemoteConfigs: [[credentialsId: "${credentialsId}", url: "${url}"]]])
+    def checkout(String url, String branch, String credentialsId = 'github') {
+        this.script.checkout([$class: 'GitSCM', branches: [[name: "*/${branch}"]], doGenerateSubmoduleConfigurations: false, extensions:  [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: "${credentialsId}", url: "${url}"]]])
     }
 
     static def configureGithubHost(def script) {
