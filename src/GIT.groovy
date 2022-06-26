@@ -43,9 +43,10 @@ class GitUtils {
             def keyPath = String.format('~/.ssh/id_rsa_%s', credentialsId)
             script.sh("""
                 cp ${script.ssh_key} ${keyPath}
-                openssl pkcs8 -topk8 -v2 aes128 -in ${keyPath} -out ${keyPath}
-                chmod 400 ${keyPath}
-                echo IdentityFile ${keyPath} >> ~/.ssh/config
+                openssl rsa -in ${keyPath} -outform pem > tmp_id_rsa.pem
+                openssl pkcs8 -topk8 -v2 aes128 -in tmp_id_rsa.pem -out tmp_id_rsa.pem
+                chmod 400 tmp_id_rsa.pem
+                echo IdentityFile tmp_id_rsa.pem >> ~/.ssh/config
             """)
         }
     }
