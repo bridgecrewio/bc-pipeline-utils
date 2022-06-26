@@ -34,8 +34,6 @@ class GitUtils {
             mkdir -p ~/.ssh
             ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
             ssh-keyscan -t rsa spring.paloaltonetworks.com >> ~/.ssh/known_hosts
-            ssh-keygen -R spring.paloaltonetworks.com
-            ssh-keyscan -t ecdsa spring.paloaltonetworks.com >> ~/.ssh/known_hosts
             """)
     }
 
