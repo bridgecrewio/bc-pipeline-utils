@@ -45,6 +45,7 @@ class GitUtils {
                 cp ${script.ssh_key} ${keyPath}
                 chmod 400 ${keyPath}
                 echo IdentityFile ${keyPath} >> ~/.ssh/config
+                echo StrictHostKeyChecking no >> ~/.ssh/config
             """)
         }
     }
