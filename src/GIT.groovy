@@ -12,9 +12,16 @@ class GitUtils {
     }
 
     def gitConfig() {
+        withCredentials([string(credentialsId: 'palo-root-ca', variable: 'palo-root-ca')]) {
+            return sh (script: """
+            echo ${palo-root-ca} > /usr/local/share/ca-certificates/springCA1.pem
+            update-ca-certificates
+        """, returnStdout: true)
+        }
         GitUtils.configureGithubHost(this.script)
         this.script.sh("git config user.email 'ci-build@bridgecrew.io'")
         this.script.sh("git config user.name 'ci-build'")
+        this.script.sh("git config --global http.sslCAInfo /usr/local/share/ca-certificates/springCA1.pem")
     }
 
     def withCredentials(String command) {
