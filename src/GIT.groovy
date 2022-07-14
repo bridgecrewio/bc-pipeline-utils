@@ -15,6 +15,7 @@ class GitUtils {
         GitUtils.configureGithubHost(this.script)
         this.script.sh("git config user.email 'ci-build@bridgecrew.io'")
         this.script.sh("git config user.name 'ci-build'")
+        this.script.sh("echo StrictHostKeyChecking no >> ~/.ssh/config")
     }
 
     def withCredentials(String command) {
@@ -45,7 +46,6 @@ class GitUtils {
                 cp ${script.ssh_key} ${keyPath}
                 chmod 400 ${keyPath}
                 echo IdentityFile ${keyPath} >> ~/.ssh/config
-                echo StrictHostKeyChecking no >> ~/.ssh/config
             """)
         }
     }
